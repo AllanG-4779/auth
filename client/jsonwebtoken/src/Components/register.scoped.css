@@ -1,0 +1,14 @@
+.form-group {
+  margin: 5px 0px;
+  padding: 10px;
+}
+.form-group label {
+  margin-bottom: 6px;
+}
+.btn-primary {
+  width: 100%;
+  margin: auto 0;
+}
+ .link-success{
+  text-decoration: none;
+}

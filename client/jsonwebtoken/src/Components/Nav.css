@@ -1,0 +1,22 @@
+.navbar {
+  padding: 1px;
+  background: linear-gradient(#1e3b50, #0d1f28);
+}
+span {
+  font-family: "Arial";
+  font-weight: bolder;
+  font-size: 2rem;
+  color: white;
+}
+.navbar-toggler-icon {
+  color: white;
+}
+.ms-start li a {
+  color: white;
+  font-weight: bolder;
+}
+.container-fluid:first-child {
+  font-size: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
