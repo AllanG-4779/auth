@@ -1,34 +1,47 @@
 // @ts-nocheck
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ReactComponent as Spinner } from "../images/Spinner.svg";
+import { logged, notLogRedirect } from "./Contexts";
 
 function Login() {
   const [user, setUser] = useState({});
   const [load, setLoad] = useState(false);
   const [err, setErr] = useState("");
+  const loggContext = useContext(logged);
+  const [notLogg_Redirect, setRedir] = useContext(notLogRedirect);
+
   const errors = document.querySelector("#errors");
 
   const login = (e) => {
     e.preventDefault();
     setLoad(true);
+
     //make a call to the api
-  
 
     axios
       .post(`http://localhost:3002/login/${user.email_phone}/${user.password}`)
       .then((success) => {
         setLoad(false);
         if (success.data) {
-          console.log(success.data);
+          loggContext[1](true);
+          localStorage.setItem(
+            "logged",
+            JSON.stringify({
+              login: true,
+              token: success.data.token,
+            })
+          );
+          window.location = "/dashboard";
         }
+        console.log(success.data.token);
       })
       .catch((error) => {
         setLoad(false);
 
         if (error.response) {
           errors.className = "alert alert-danger";
-          console.log(error)
+          console.log(error);
           setErr(error.response.data.Message);
         }
         setTimeout(() => {
@@ -107,6 +120,12 @@ function Login() {
               </button>
             </div>
           </form>
+          {notLogg_Redirect ? (
+            <p id="log" className="alert alert-warning ">
+              You must log in to view the requested resourxw!
+            </p>
+            
+          ): " "}
         </div>
       </div>
     </div>

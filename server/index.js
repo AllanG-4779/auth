@@ -1,9 +1,11 @@
+// @ts-nocheck
 const express = require("express");
 const jwt = require("jsonwebtoken");
 
 const { database } = require("./database");
 const bcrypt = require("bcrypt");
 const { response } = require("express");
+const cors = require("cors");
 //for auth
 const cookie = require("cookie-parser");
 const body_parser = require("body-parser");
@@ -14,22 +16,19 @@ app.use(express.json());
 const users = [];
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use((req,res,next)=>{
-  res.header("Access-Control-Allow-Origin","*")
-})
-
-app.use(cookie());
-
 app.use(
-  express_session({
-    secret: "current_logged_in",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      maxAge: 60 * 60 * 1000 * 24,
-    },
+  cors({
+    origin: "*",
+    methods: ["PUT", "GET", "POST"],
   })
 );
+// app.use((req,res,next)=>{
+//   res.header("Access-Control-Allow-Origin","*")
+//   res.header("Access-Control-Allow-Headers","*")
+//   next()
+// })
+
+app.use(cookie());
 
 app.post("/login/:id/:password", (req, res) => {
   const query_to_login =
@@ -52,14 +51,17 @@ app.post("/login/:id/:password", (req, res) => {
             current_user[0].Password,
             (wrong, correct) => {
               if (wrong) {
-                console.log(wrong)
+                console.log(wrong);
+                res.status(403).json({ Message: "Server Error" });
+              } else if (correct) {
+                let currentUser = current_user[0];
+                jwt.sign({ user: currentUser }, "signIn",{expiresIn:"30s"}, (err, token) => {
+                  res.status(201).json({ token: token });
+                });
+              } else {
                 res
                   .status(403)
-                  .json({ Message: "Wrong user address or password" });
-              } else if (correct) {
-                req.session.myUser = current_user[0];
-                console.log(req.session.myUser);
-                res.status(200).json({ Message: "OK" });
+                  .json({ Message: "Wrong username or Password " });
               }
             }
           );
@@ -162,14 +164,44 @@ app.post("/register", async (req, res) => {
     res.status(400).json({ Message: "please fill in all the fields" });
   }
 });
-app.get("/check", (req, res) => {
-  if (req.session.myUser) {
-    console.log(req.session.myUser);
-    res.status(200).json({ User: req.session.myUser, signedIn: true });
+// app.get("/check", (req, res) => {
+//   if (req.session.myUser) {
+//     console.log(req.session.myUser);
+//     res.status(200).json({ User: req.session.myUser, signedIn: true });
+//   } else {
+//     console.log(req.session.myUser);
+//     res.status(403).json({ Logged: false });
+//   }
+// });
+//verify login
+const verify = (req, res, next) => {
+  //get auth_header
+  const bearer_header = req.headers.authorization;
+  //checkif bearer_header is undefined
+
+  if (typeof bearer_header !== "undefined") {
+    const bear = bearer_header.split(" ");
+
+    //get token
+    const token = bear[1];
+
+    req.token = token;
+    next();
   } else {
-    console.log(req.session.myUser);
-    res.status(403).json({ Logged: false });
+    res
+      .status(403)
+      .json({ Message: "Access Denied for the requested resource" });
   }
+};
+
+app.get("/dashboard", verify, (req, res) => {
+  jwt.verify(req.token, "signIn", (err, data) => {
+    if (err) {
+      res.status(403).json({ Message: "Login first" });
+    } else {
+      res.status(201).json({ Message: data });
+    }
+  });
 });
 
 app.listen(3002, () => {

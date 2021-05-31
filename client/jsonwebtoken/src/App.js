@@ -6,27 +6,42 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import NotFound from "./Components/NotFound";
 import Dashboard from "./Components/Dashboard";
 import SortingVisual from "./visual/SortingVisual";
+import { logged, notLogRedirect } from "./Components/Contexts";
+import { useEffect, useState } from "react";
 
 function App() {
+  const [log, setLog] = useState(false);
+  const [redirect, setRedirect] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("logged")) {
+      setLog(true);
+    }
+    console.log(log);
+  }, [log]);
   return (
     <div className="App">
-      <Router>
-        <Nav />
-        <Switch>
-          <Route path="/login" exact>
-            <Login />
-          </Route>
-          <Route path="/register" exact>
-            <Register />
-          </Route>
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
-          <Route path="/">
-            <NotFound />
-          </Route>
-        </Switch>
-      </Router>
+      <notLogRedirect.Provider value={[redirect, setRedirect]}>
+        <logged.Provider value={[log, setLog]}>
+          <Router>
+            <Nav />
+            <Switch>
+              <Route path="/login" exact>
+                <Login />
+              </Route>
+              <Route path="/register" exact>
+                <Register />
+              </Route>
+              <Route path="/dashboard">
+                <Dashboard />
+              </Route>
+              <Route path="/">
+                <NotFound />
+              </Route>
+            </Switch>
+          </Router>
+        </logged.Provider>
+      </notLogRedirect.Provider>
       {/* <SortingVisual/> */}
     </div>
   );
