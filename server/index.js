@@ -7,9 +7,10 @@ const bcrypt = require("bcrypt");
 const { response } = require("express");
 const cors = require("cors");
 //for auth
-const cookie = require("cookie-parser");
-const body_parser = require("body-parser");
-const express_session = require("express-session");
+const cookie = require("cookie-parser")
+require("dotenv").config()
+
+
 
 const app = express();
 app.use(express.json());
@@ -204,6 +205,6 @@ app.get("/dashboard", verify, (req, res) => {
   });
 });
 
-app.listen(3002, () => {
+app.listen(process.env.PORT||3001, () => {
   console.log("listening on port 3002");
 });
