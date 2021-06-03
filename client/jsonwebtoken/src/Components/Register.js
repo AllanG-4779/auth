@@ -1,14 +1,13 @@
 // @ts-nocheck
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./register.scoped.css";
 
 function Register() {
   const [user, setUser] = useState({});
   const [load, setloading] = useState(false);
   const [message, setMessage] = useState("");
-  const pass = document.getElementById("message");
-
+ 
   const saveData = async (e) => {
     setloading(!load);
 
@@ -24,7 +23,7 @@ function Register() {
     // }
 
     axios
-      .post("http://localhost:3002/register", user)
+      .post("https://jwt-auth-node-app.herokuapp.com/register", user)
       .then((succ) => {
         setloading(load);
         if (succ.data) {

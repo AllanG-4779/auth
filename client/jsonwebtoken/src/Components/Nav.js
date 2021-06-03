@@ -1,10 +1,11 @@
 // @ts-nocheck
-import React, { useContext, useState } from "react";
+import React, { useContext} from "react";
+import { Link } from "react-router-dom";
 import { logged } from "./Contexts";
 import "./Nav.css";
 
 function Nav() {
-  const [log, setLog] = useContext(logged);
+  const [log] = useContext(logged);
 
   const logOut = () => {
     localStorage.removeItem("logged");
@@ -36,29 +37,29 @@ function Nav() {
             <ul className="navbar-nav ms-auto">
               {log && (
                 <li>
-                  <a className="nav-link" href="/dashboard">
+                  <Link className="nav-link" to="/dashboard">
                     Dashboard
-                  </a>
+                  </Link>
                 </li>
               )}
               {!log && (
                 <li>
-                  <a className="nav-link" href="/login">
+                  <Link className="nav-link" to="/login">
                     Login
-                  </a>
+                  </Link>
                 </li>
               )}
               {!log && (
                 <li>
-                  <a className="nav-link" href="/register">
+                  <Link className="nav-link" to="/register">
                     Sign up
-                  </a>
+                  </Link>
                 </li>
               )}
 
               {log && (
                 <li>
-                  <a className="nav-link" href="/register">
+                  <a className="nav-link" to="/register">
                     Profile
                   </a>
                 </li>

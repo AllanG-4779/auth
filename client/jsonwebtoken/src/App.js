@@ -5,7 +5,7 @@ import Register from "./Components/Register";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import NotFound from "./Components/NotFound";
 import Dashboard from "./Components/Dashboard";
-import SortingVisual from "./visual/SortingVisual";
+
 import { logged, notLogRedirect } from "./Components/Contexts";
 import { useEffect, useState } from "react";
 

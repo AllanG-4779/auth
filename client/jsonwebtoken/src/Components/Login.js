@@ -9,7 +9,7 @@ function Login() {
   const [load, setLoad] = useState(false);
   const [err, setErr] = useState("");
   const loggContext = useContext(logged);
-  const [notLogg_Redirect, setRedir] = useContext(notLogRedirect);
+  const [notLogg_Redirect] = useContext(notLogRedirect);
 
   const errors = document.querySelector("#errors");
 
@@ -20,7 +20,9 @@ function Login() {
     //make a call to the api
 
     axios
-      .post(`http://localhost:3002/login/${user.email_phone}/${user.password}`)
+      .post(
+        `https://jwt-auth-node-app.herokuapp.com/${user.email_phone}/${user.password}`
+      )
       .then((success) => {
         setLoad(false);
         if (success.data) {
@@ -41,7 +43,7 @@ function Login() {
 
         if (error.response) {
           errors.className = "alert alert-danger";
-          console.log(error);
+          console.log("the error is " ,error);
           setErr(error.response.data.Message);
         }
         setTimeout(() => {
@@ -124,8 +126,9 @@ function Login() {
             <p id="log" className="alert alert-warning ">
               You must log in to view the requested resourxw!
             </p>
-            
-          ): " "}
+          ) : (
+            " "
+          )}
         </div>
       </div>
     </div>

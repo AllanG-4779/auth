@@ -1,10 +1,10 @@
 // @ts-nocheck
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { notLogRedirect, logged } from "./Contexts";
+import {  logged } from "./Contexts";
 
 function Dashboard() {
-  const [log, setLog] = useContext(logged);
+  const [log] = useContext(logged);
   const [current, setCurr] = useState({});
   useEffect(() => {
     let token = "";
@@ -12,7 +12,7 @@ function Dashboard() {
       token = JSON.parse(localStorage.getItem("logged")).token;
     }
     axios
-      .get("http://localhost:3002/dashboard", {
+      .get("https://jwt-auth-node-app.herokuapp.com/dashboard", {
         headers: {
           Authorization: `Bearer ${token}
             
