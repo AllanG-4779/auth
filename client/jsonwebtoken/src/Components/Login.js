@@ -21,7 +21,9 @@ function Login() {
 
     axios
       .post(
-        `https://jwt-auth-node-app.herokuapp.com/${user.email_phone}/${user.password}`
+        `https://jwt-auth-node-app.herokuapp.com/${user.email_phone}/${user.password}`,{headers:{
+          "Access-Control-Allow-Origin":"*"
+        }}
       )
       .then((success) => {
         setLoad(false);

@@ -8,6 +8,7 @@ import Dashboard from "./Components/Dashboard";
 
 import { logged, notLogRedirect } from "./Components/Contexts";
 import { useEffect, useState } from "react";
+import Home from "./Components/Home";
 
 function App() {
   const [log, setLog] = useState(false);
@@ -35,8 +36,8 @@ function App() {
               <Route path="/dashboard">
                 <Dashboard />
               </Route>
-              <Route path="/">
-                <NotFound />
+              <Route path="/" exact>
+                <Home />
               </Route>
             </Switch>
           </Router>
